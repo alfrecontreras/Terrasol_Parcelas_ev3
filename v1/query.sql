@@ -16,9 +16,9 @@ SELECT id, nombre, activo FROM mantenedor;
 SELECT id, nombre, activo FROM mantenedor WHERE id = 3;
 -- POST
 INSERT INTO mantenedor (id, nombre) VALUES 
-(1, 'Ejemplo 1'),
-(2, 'Ejemplo 2'),
-(3, 'Ejemplo 3');
+(1, 'user 1'),
+(2, 'user 2'),
+(3, 'user 3');
 -- PATCH / ENABLE
 UPDATE mantenedor SET activo = true WHERE id = 3;
 -- PATCH / DISABLE
