@@ -16,12 +16,12 @@ class Conexion
         $this->server = $_SERVER['HTTP_HOST'];
         $this->connection = null;
         $this->port = 3306;
-        $this->db = "Terrasol_Parcelas";
-        $this->host = "terrasol-parcelas";
+        $this->db = "ciisa_backend_v1_71";
+        $this->host = "localhost";
 
-        if ($this->server == 'terrasol-parcelas') {
-            $this->username = 'Terrasol_Parcela@localhost';
-            $this->password = 'user123';
+        if ($this->server == 'localhost') {
+            $this->username = 'ciisa_backend_v1_71';
+            $this->password = 'l4cl4v3-c11s4';
         }
     }
 

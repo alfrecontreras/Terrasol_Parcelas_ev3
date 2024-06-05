@@ -1,5 +1,7 @@
-DELETE DATABASE IF NOT EXISTS terrasol;
-USE terrasol;
+CREATE DATABASE ciisa_backend_v1_71;
+CREATE USER 'ciisa_backend_v1_71'@'localhost' IDENTIFIED BY 'l4cl4v3-c11s4';
+GRANT ALL PRIVILEGES ON ciisa_backend_v1_71.* TO 'ciisa_backend_v1_71'@'localhost';
+FLUSH PRIVILEGES;
 
 CREATE TABLE IF NOT EXISTS categoria_servicio (
     id INT AUTO_INCREMENT PRIMARY KEY,
