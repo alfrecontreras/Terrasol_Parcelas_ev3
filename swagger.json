@@ -1,826 +1,835 @@
 {
-    "openapi": "3.0.0",
-    "info": {
-        "title": "API Documentation",
-        "description": "Este es un servidor de muestra de lo realizado en clases. Puede obtener más información sobre Swagger en [http://swagger.io](http://swagger.io) o en [irc.freenode.net, #swagger](http://swagger.io/irc/). <br><br>Para este ejemplo, puede utilizar las siguientes claves de API para métodos:<ul><li>Método GET - Authorization Bearer: `get_terrasol`</li><li>Método POST - Authorization Bearer: `post_terrasol`</li><li>Método PATCH - Authorization Bearer: `patch_terrasol`</li><li>Método PUT - Authorization Bearer: `put_terrasol`</li><li>Método DELETE - Authorization Bearer: `delete_terrasol`</li></ul>.",
-        "version": "1.0.0"
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Documentation",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/pregunta-frecuente/": {
+      "get": {
+        "tags": ["Preguntas Frecuentes"],
+        "summary": "Retorna todos las preguntas frecuentes.",
+        "description": "Retorna una lista de preguntas frecuentes, incluye: id, pregunta, respuesta y activo",
+        "responses": {
+          "200": {
+            "description": "Respuesta exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreguntaFrecuenteResponse"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"}
+        },
+        "security": [{"bearerAuthGet": []}]
+      },
+      "post": {
+        "tags": ["Preguntas Frecuentes"],
+        "summary": "Crear nueva nueva pregunta frecuente",
+        "description": "Crea una pregunta frecuente, incluye: pregunta y respuesta",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreguntaFrecuenteCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Creación exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"}
+        },
+        "security": [{"bearerAuthPost": []}]
+      },
+      "patch": {
+        "tags": ["Preguntas Frecuentes"],
+        "summary": "Apagar o Encender una pregunta frecuente",
+        "description": "Apaga o Enciende una pregunta frecuente, deja activo en false o true respectivamente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID del objeto",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "accion",
+            "in": "query",
+            "description": "La acción es requerida para la ejecución.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["apagar", "encender"],
+              "default": "apagar"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cambio exitoso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"}
+        },
+        "security": [{"bearerAuthPatch": []}]
+      },
+      "put": {
+        "tags": ["Preguntas Frecuentes"],
+        "summary": "Modifica los datos de una pregunta frecuente",
+        "description": "Puede modificar el atributo `pregunta` y/o `respuesta`. Pueden ser juntos o separados.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreguntaFrecuenteUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Actualización exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"},
+          "409": {
+            "description": "Error: Conflicto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictoExiste"
+                }
+              }
+            }
+          }
+        },
+        "security": [{"bearerAuthPut": []}]
+      },
+      "delete": {
+        "tags": ["Preguntas Frecuentes"],
+        "summary": "Eliminar una pregunta frecuente",
+        "description": "Elimina una pregunta frecuente, borra de la base de datos.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID del objeto",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Eliminación exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"},
+          "404": {
+            "description": "Error: No encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictoExiste"
+                }
+              }
+            }
+          },
+          "405": {"description": "Error: No implementado"},
+          "406": {
+            "description": "Error: No aceptable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictoExiste"
+                }
+              }
+            }
+          }
+        },
+        "security": [{"bearerAuthDelete": []}]
+      }
     },
-    "servers": [
-        {
-            "url": "http://localhost/Terrasol-Parcelas/api",
-            "description": "Ambiente Dev"
-        }
-    ],
-    "tags": [
-        {
-            "name": "Preguntas Frecuentes",
-            "description": "Son preguntas que los clientes hacen frecuentemente, se generaron respuestas estandar."
-        },
-        {
-            "name": "Historia",
-            "description": "Información histórica de la organización."
-        },
-        {
-            "name": "InfoContacto",
-            "description": "Información de contacto."
-        },
-        {
-            "name": "Parcela",
-            "description": "Gestión de parcelas."
-        }
-    ],
-    "paths": {
-        "/pregunta-frecuente/": {
-            "get": {
-                "tags": [
-                    "Preguntas Frecuentes"
-                ],
-                "summary": "Retorna todos las preguntas frecuentes.",
-                "description": "Retorna una lista de preguntas frecuentes, incluye: id, pregunta, respuesta y activo",
-                "responses": {
-                    "200": {
-                        "description": "Respuesta exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/pregunta-frecuenteResponse"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthGet": []
-                    }
-                ]
-            },
-            "post": {
-                "tags": [
-                    "Preguntas Frecuentes"
-                ],
-                "summary": "Crear nueva nueva pregunta frecuente",
-                "description": "Crea una pregunta frecuente, incluye: pregunta y respuesta",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/pregunta-frecuenteCreate"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Creación exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthPost": []
-                    }
-                ]
-            },
-            "patch": {
-                "tags": [
-                    "Preguntas Frecuentes"
-                ],
-                "summary": "Apagar o Encender una pregunta frecuente",
-                "description": "Apaga o Enciende una pregunta frecuente, deja activo en false o true respectivamente.",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "description": "ID del objeto",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    },
-                    {
-                        "name": "accion",
-                        "in": "query",
-                        "description": "La acción es requerida para la ejecución.",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "apagar",
-                                "encender"
-                            ],
-                            "default": "apagar"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Cambio exitoso",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthPatch": []
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "Preguntas Frecuentes"
-                ],
-                "summary": "Modifica los datos de una pregunta frecuente",
-                "description": "Puede modificar el atributo `pregunta` y/o `respuesta`. Pueden ser juntos o separados.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/pregunta-frecuenteUpdate"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Actualización exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    },
-                    "409": {
-                        "description": "Error: Conflicto",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ConflictoExiste"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthPut": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "Preguntas Frecuentes"
-                ],
-                "summary": "Eliminar una pregunta frecuente",
-                "description": "Elimina una pregunta frecuente, borra de la base de datos.",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "description": "ID del objeto",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Eliminación exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    },
-                    "404": {
-                        "description": "Error: No encontrado",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ConflictoExiste"
-                                }
-                            }
-                        }
-                    },
-                    "405": {
-                        "description": "Error: No implementado"
-                    },
-                    "406": {
-                        "description": "Error: No aceptable",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ConflictoExiste"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthDelete": []
-                    }
-                ]
+    "/historia/": {
+      "get": {
+        "tags": ["Historia"],
+        "summary": "Retorna todas las historias.",
+        "description": "Retorna una lista de historias, incluye: id, titulo, contenido y fecha",
+        "responses": {
+          "200": {
+            "description": "Respuesta exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoriaResponse"
+                }
+              }
             }
+          },
+          "401": {"description": "Error: Sin Autorización"}
         },
-        "/historia/": {
-            "get": {
-                "tags": [
-                    "Historia"
-                ],
-                "summary": "Retorna toda la información histórica.",
-                "description": "Retorna una lista de entradas históricas, incluye: id, título, descripción, y fecha",
-                "responses": {
-                    "200": {
-                        "description": "Respuesta exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/historiaResponse"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthGet": []
-                    }
-                ]
-            },
-            "post": {
-                "tags": [
-                    "Historia"
-                ],
-                "summary": "Crear una nueva entrada histórica",
-                "description": "Crea una nueva entrada histórica, incluye: título, descripción y fecha",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/historiaCreate"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Creación exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthPost": []
-                    }
-                ]
-            },
-            "patch": {
-                "tags": [
-                    "Historia"
-                ],
-                "summary": "Actualizar una entrada histórica",
-                "description": "Actualiza una entrada histórica existente.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/historiaUpdate"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Actualización exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    },
-                    "404": {
-                        "description": "Error: No encontrado"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthPatch": []
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "Historia"
-                ],
-                "summary": "Modificar los datos de una entrada histórica",
-                "description": "Puede modificar el título, descripción y/o fecha de una entrada histórica.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/historiaUpdate"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Actualización exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    },
-                    "404": {
-                        "description": "Error: No encontrado"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthPut": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "Historia"
-                ],
-                "summary": "Eliminar una entrada histórica",
-                "description": "Elimina una entrada histórica existente.",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "description": "ID de la entrada histórica",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Eliminación exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    },
-                    "404": {
-                        "description": "Error: No encontrado"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthDelete": []
-                    }
-                ]
+        "security": [{"bearerAuthGet": []}]
+      },
+      "post": {
+        "tags": ["Historia"],
+        "summary": "Crear nueva historia",
+        "description": "Crea una historia, incluye: titulo, contenido y fecha",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HistoriaCreate"
+              }
             }
+          }
         },
-        "/info-contacto/": {
-            "get": {
-                "tags": [
-                    "InfoContacto"
-                ],
-                "summary": "Retorna toda la información de contacto.",
-                "description": "Retorna una lista de entradas de contacto, incluye: id, nombre, email, y teléfono",
-                "responses": {
-                    "200": {
-                        "description": "Respuesta exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/info-contactoResponse"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthGet": []
-                    }
-                ]
-            },
-            "post": {
-                "tags": [
-                    "InfoContacto"
-                ],
-                "summary": "Crear una nueva entrada de contacto",
-                "description": "Crea una nueva entrada de contacto, incluye: nombre, email y teléfono",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/info-contactoCreate"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Creación exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthPost": []
-                    }
-                ]
-            },
-            "patch": {
-                "tags": [
-                    "InfoContacto"
-                ],
-                "summary": "Actualizar una entrada de contacto",
-                "description": "Actualiza una entrada de contacto existente.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/info-contactoUpdate"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Actualización exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    },
-                    "404": {
-                        "description": "Error: No encontrado"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthPatch": []
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "InfoContacto"
-                ],
-                "summary": "Modificar los datos de una entrada de contacto",
-                "description": "Puede modificar el nombre, email y/o teléfono de una entrada de contacto.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/info-contactoUpdate"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Actualización exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    },
-                    "404": {
-                        "description": "Error: No encontrado"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthPut": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "InfoContacto"
-                ],
-                "summary": "Eliminar una entrada de contacto",
-                "description": "Elimina una entrada de contacto existente.",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "description": "ID de la entrada de contacto",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Eliminación exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    },
-                    "404": {
-                        "description": "Error: No encontrado"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthDelete": []
-                    }
-                ]
+        "responses": {
+          "201": {
+            "description": "Creación exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
             }
+          },
+          "401": {"description": "Error: Sin Autorización"}
         },
-        "/parcela/": {
-            "get": {
-                "tags": [
-                    "Parcela"
-                ],
-                "summary": "Retorna toda la información de parcelas.",
-                "description": "Retorna una lista de parcelas, incluye: id, nombre, tamaño, y ubicación",
-                "responses": {
-                    "200": {
-                        "description": "Respuesta exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/parcelaResponse"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthGet": []
-                    }
-                ]
-            },
-            "post": {
-                "tags": [
-                    "Parcela"
-                ],
-                "summary": "Crear una nueva parcela",
-                "description": "Crea una nueva parcela, incluye: nombre, tamaño y ubicación",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/parcelaCreate"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Creación exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthPost": []
-                    }
-                ]
-            },
-            "patch": {
-                "tags": [
-                    "Parcela"
-                ],
-                "summary": "Actualizar una parcela existente",
-                "description": "Actualiza una parcela existente.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/parcelaUpdate"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Actualización exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    },
-                    "404": {
-                        "description": "Error: No encontrado"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthPatch": []
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "Parcela"
-                ],
-                "summary": "Modificar los datos de una parcela",
-                "description": "Puede modificar el nombre, tamaño y/o ubicación de una parcela.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/parcelaUpdate"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Actualización exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    },
-                    "404": {
-                        "description": "Error: No encontrado"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthPut": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "Parcela"
-                ],
-                "summary": "Eliminar una parcela",
-                "description": "Elimina una parcela existente.",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "query",
-                        "description": "ID de la parcela",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Eliminación exitosa",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ResultadoOk"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Error: Sin Autorización"
-                    },
-                    "404": {
-                        "description": "Error: No encontrado"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuthDelete": []
-                    }
-                ]
+        "security": [{"bearerAuthPost": []}]
+      },
+      "patch": {
+        "tags": ["Historia"],
+        "summary": "Modificar una historia",
+        "description": "Modifica una historia, puede cambiar el titulo, contenido y fecha.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID del objeto",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HistoriaUpdate"
+              }
             }
-        }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Actualización exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"}
+        },
+        "security": [{"bearerAuthPatch": []}]
+      },
+      "put": {
+        "tags": ["Historia"],
+        "summary": "Modifica los datos de una historia",
+        "description": "Puede modificar el atributo `titulo`, `contenido` y/o `fecha`. Pueden ser juntos o separados.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HistoriaUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Actualización exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"}
+        },
+        "security": [{"bearerAuthPut": []}]
+      },
+      "delete": {
+        "tags": ["Historia"],
+        "summary": "Eliminar una historia",
+        "description": "Elimina una historia, borra de la base de datos.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID del objeto",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Eliminación exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"},
+          "404": {
+            "description": "Error: No encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictoExiste"
+                }
+              }
+            }
+          },
+          "405": {"description": "Error: No implementado"},
+          "406": {
+            "description": "Error: No aceptable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictoExiste"
+                }
+              }
+            }
+          }
+        },
+        "security": [{"bearerAuthDelete": []}]
+      }
+    },
+    "/info-contacto/": {
+      "get": {
+        "tags": ["Info Contacto"],
+        "summary": "Retorna toda la información de contacto.",
+        "description": "Retorna una lista de información de contacto, incluye: id, nombre, email, telefono, direccion",
+        "responses": {
+          "200": {
+            "description": "Respuesta exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InfoContactoResponse"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"}
+        },
+        "security": [{"bearerAuthGet": []}]
+      },
+      "post": {
+        "tags": ["Info Contacto"],
+        "summary": "Crear nueva información de contacto",
+        "description": "Crea información de contacto, incluye: nombre, email, telefono, direccion",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InfoContactoCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Creación exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"}
+        },
+        "security": [{"bearerAuthPost": []}]
+      },
+      "patch": {
+        "tags": ["Info Contacto"],
+        "summary": "Modificar información de contacto",
+        "description": "Modifica información de contacto, puede cambiar el nombre, email, telefono, direccion.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID del objeto",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InfoContactoUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Actualización exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"}
+        },
+        "security": [{"bearerAuthPatch": []}]
+      },
+      "put": {
+        "tags": ["Info Contacto"],
+        "summary": "Modifica los datos de información de contacto",
+        "description": "Puede modificar el atributo `nombre`, `email`, `telefono` y/o `direccion`. Pueden ser juntos o separados.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InfoContactoUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Actualización exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"}
+        },
+        "security": [{"bearerAuthPut": []}]
+      },
+      "delete": {
+        "tags": ["Info Contacto"],
+        "summary": "Eliminar información de contacto",
+        "description": "Elimina información de contacto, borra de la base de datos.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID del objeto",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Eliminación exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"},
+          "404": {
+            "description": "Error: No encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictoExiste"
+                }
+              }
+            }
+          },
+          "405": {"description": "Error: No implementado"},
+          "406": {
+            "description": "Error: No aceptable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictoExiste"
+                }
+              }
+            }
+          }
+        },
+        "security": [{"bearerAuthDelete": []}]
+      }
+    },
+    "/parcela/": {
+      "get": {
+        "tags": ["Parcela"],
+        "summary": "Retorna todas las parcelas.",
+        "description": "Retorna una lista de parcelas, incluye: id, nombre, ubicacion, tamaño",
+        "responses": {
+          "200": {
+            "description": "Respuesta exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParcelaResponse"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"}
+        },
+        "security": [{"bearerAuthGet": []}]
+      },
+      "post": {
+        "tags": ["Parcela"],
+        "summary": "Crear nueva parcela",
+        "description": "Crea una parcela, incluye: nombre, ubicacion, tamaño",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParcelaCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Creación exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"}
+        },
+        "security": [{"bearerAuthPost": []}]
+      },
+      "patch": {
+        "tags": ["Parcela"],
+        "summary": "Modificar una parcela",
+        "description": "Modifica una parcela, puede cambiar el nombre, ubicacion, tamaño.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID del objeto",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParcelaUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Actualización exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"}
+        },
+        "security": [{"bearerAuthPatch": []}]
+      },
+      "put": {
+        "tags": ["Parcela"],
+        "summary": "Modifica los datos de una parcela",
+        "description": "Puede modificar el atributo `nombre`, `ubicacion`, `tamaño`. Pueden ser juntos o separados.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParcelaUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Actualización exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"}
+        },
+        "security": [{"bearerAuthPut": []}]
+      },
+      "delete": {
+        "tags": ["Parcela"],
+        "summary": "Eliminar una parcela",
+        "description": "Elimina una parcela, borra de la base de datos.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID del objeto",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Eliminación exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultadoOk"
+                }
+              }
+            }
+          },
+          "401": {"description": "Error: Sin Autorización"},
+          "404": {
+            "description": "Error: No encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictoExiste"
+                }
+              }
+            }
+          },
+          "405": {"description": "Error: No implementado"},
+          "406": {
+            "description": "Error: No aceptable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictoExiste"
+                }
+              }
+            }
+          }
+        },
+        "security": [{"bearerAuthDelete": []}]
+      }
     }
+  },
+  "components": {
+    "schemas": {
+      "PreguntaFrecuenteResponse": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "integer"},
+          "pregunta": {"type": "string"},
+          "respuesta": {"type": "string"},
+          "activo": {"type": "boolean"}
+        }
+      },
+      "PreguntaFrecuenteCreate": {
+        "type": "object",
+        "required": ["pregunta", "respuesta"],
+        "properties": {
+          "pregunta": {"type": "string"},
+          "respuesta": {"type": "string"}
+        }
+      },
+      "PreguntaFrecuenteUpdate": {
+        "type": "object",
+        "properties": {
+          "pregunta": {"type": "string"},
+          "respuesta": {"type": "string"}
+        }
+      },
+      "ResultadoOk": {
+        "type": "object",
+        "properties": {
+          "message": {"type": "string"}
+        }
+      },
+      "ConflictoExiste": {
+        "type": "object",
+        "properties": {
+          "message": {"type": "string"}
+        }
+      },
+      "HistoriaResponse": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "integer"},
+          "titulo": {"type": "string"},
+          "contenido": {"type": "string"},
+          "fecha": {"type": "string", "format": "date-time"}
+        }
+      },
+      "HistoriaCreate": {
+        "type": "object",
+        "required": ["titulo", "contenido", "fecha"],
+        "properties": {
+          "titulo": {"type": "string"},
+          "contenido": {"type": "string"},
+          "fecha": {"type": "string", "format": "date-time"}
+        }
+      },
+      "HistoriaUpdate": {
+        "type": "object",
+        "properties": {
+          "titulo": {"type": "string"},
+          "contenido": {"type": "string"},
+          "fecha": {"type": "string", "format": "date-time"}
+        }
+      },
+      "InfoContactoResponse": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "integer"},
+          "nombre": {"type": "string"},
+          "email": {"type": "string"},
+          "telefono": {"type": "string"},
+          "direccion": {"type": "string"}
+        }
+      },
+      "InfoContactoCreate": {
+        "type": "object",
+        "required": ["nombre", "email", "telefono", "direccion"],
+        "properties": {
+          "nombre": {"type": "string"},
+          "email": {"type": "string"},
+          "telefono": {"type": "string"},
+          "direccion": {"type": "string"}
+        }
+      },
+      "InfoContactoUpdate": {
+        "type": "object",
+        "properties": {
+          "nombre": {"type": "string"},
+          "email": {"type": "string"},
+          "telefono": {"type": "string"},
+          "direccion": {"type": "string"}
+        }
+      },
+      "ParcelaResponse": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "integer"},
+          "nombre": {"type": "string"},
+          "ubicacion": {"type": "string"},
+          "tamaño": {"type": "string"}
+        }
+      },
+      "ParcelaCreate": {
+        "type": "object",
+        "required": ["nombre", "ubicacion", "tamaño"],
+        "properties": {
+          "nombre": {"type": "string"},
+          "ubicacion": {"type": "string"},
+          "tamaño": {"type": "string"}
+        }
+      },
+      "ParcelaUpdate": {
+        "type": "object",
+        "properties": {
+          "nombre": {"type": "string"},
+          "ubicacion": {"type": "string"},
+          "tamaño": {"type": "string"}
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuthGet": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "bearerAuthPost": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "bearerAuthPatch": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "bearerAuthPut": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "bearerAuthDelete": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
 }
